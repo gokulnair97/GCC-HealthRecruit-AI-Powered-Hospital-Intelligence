@@ -1,0 +1,131 @@
+{
+  "design_system": {
+    "identity": {
+      "name": "GCC HealthRecruit AI",
+      "persona": "E1 - The Anti-AI Designer",
+      "vibe": "Cyber-Medical Intelligence",
+      "theme": "dark",
+      "emotional_tone": "Precision, Authority, High-Tech, Trust"
+    },
+    "typography": {
+      "font_family": {
+        "headings": "Outfit, sans-serif",
+        "body": "Inter, sans-serif",
+        "mono": "JetBrains Mono, monospace"
+      },
+      "scale": {
+        "h1": "text-5xl md:text-6xl font-bold tracking-tight",
+        "h2": "text-4xl font-semibold tracking-tight",
+        "h3": "text-2xl font-medium",
+        "body": "text-base leading-relaxed text-zinc-400",
+        "caption": "text-xs uppercase tracking-widest text-zinc-500"
+      }
+    },
+    "colors": {
+      "palette": {
+        "background": "#09090B",
+        "surface": "#18181B",
+        "surface_highlight": "#27272A",
+        "border": "#27272A",
+        "primary": "#3B82F6",
+        "primary_foreground": "#FFFFFF",
+        "secondary": "#06B6D4",
+        "accent": "#8B5CF6",
+        "success": "#10B981",
+        "warning": "#F59E0B",
+        "error": "#EF4444",
+        "text_primary": "#FAFAFA",
+        "text_secondary": "#A1A1AA"
+      },
+      "gradients": {
+        "primary_glow": "radial-gradient(circle at center, rgba(59, 130, 246, 0.15) 0%, rgba(9, 9, 11, 0) 70%)",
+        "card_hover": "linear-gradient(145deg, rgba(39, 39, 42, 0.5) 0%, rgba(24, 24, 27, 0.5) 100%)"
+      }
+    },
+    "layout": {
+      "spacing": {
+        "container_padding": "p-6 md:p-10",
+        "section_gap": "gap-8",
+        "card_padding": "p-6"
+      },
+      "grid": {
+        "bento_dashboard": "grid grid-cols-1 md:grid-cols-12 gap-6",
+        "card_list": "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+      },
+      "border_radius": {
+        "card": "rounded-xl",
+        "button": "rounded-lg",
+        "input": "rounded-md"
+      }
+    },
+    "effects": {
+      "glassmorphism": "bg-zinc-900/60 backdrop-blur-xl border border-white/10",
+      "shadows": {
+        "card": "shadow-xl shadow-black/20",
+        "glow": "0 0 20px -5px rgba(59, 130, 246, 0.3)"
+      },
+      "animations": {
+        "hover_lift": "transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:border-blue-500/30",
+        "fade_in": "animate-in fade-in zoom-in-95 duration-500",
+        "slide_up": "animate-in slide-in-from-bottom-4 duration-500"
+      }
+    },
+    "components": {
+      "buttons": {
+        "primary": "bg-blue-600 hover:bg-blue-500 text-white font-medium px-6 py-2.5 rounded-lg transition-all shadow-lg shadow-blue-900/20 hover:shadow-blue-500/30 active:scale-95",
+        "secondary": "bg-zinc-800 hover:bg-zinc-700 text-zinc-100 border border-zinc-700 hover:border-zinc-600 transition-all active:scale-95",
+        "outline": "bg-transparent border border-zinc-700 text-zinc-300 hover:text-white hover:border-zinc-500 transition-all"
+      },
+      "inputs": {
+        "default": "bg-zinc-900/50 border border-zinc-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-zinc-100 placeholder:text-zinc-600 rounded-md px-4 py-2.5 transition-all outline-none"
+      },
+      "cards": {
+        "hospital_card": "group relative overflow-hidden bg-zinc-900/40 border border-zinc-800 hover:border-blue-500/50 rounded-xl p-6 transition-all duration-300 hover:bg-zinc-900/60",
+        "stat_card": "bg-gradient-to-br from-zinc-900 to-zinc-950 border border-zinc-800/60 p-6 rounded-xl relative overflow-hidden"
+      }
+    },
+    "visual_enhancers": {
+      "textures": "Use subtle noise overlays (opacity-5) on the main background to reduce digital flatness.",
+      "accents": "Use 1px glowing borders (blue/cyan) on active elements.",
+      "icons": "Use 'Lucide-React' icons. Thin strokes (1.5px). Text-zinc-400 default, text-blue-400 active."
+    },
+    "assets": {
+      "images": {
+        "login_bg": {
+          "url": "https://images.unsplash.com/photo-1640697687394-d02650d7ecc6",
+          "alt": "Abstract Global Digital Network",
+          "usage": "Full screen background for login page with overlay"
+        },
+        "regions": {
+          "riyadh": "https://images.pexels.com/photos/35761/pexels-photo.jpg",
+          "dubai": "https://images.pexels.com/photos/31084537/pexels-photo-31084537.jpeg",
+          "doha": "https://images.pexels.com/photos/30620775/pexels-photo-30620775.jpeg",
+          "general_night": "https://images.unsplash.com/photo-1663900108404-a05e8bf82cda"
+        }
+      }
+    },
+    "instructions_to_main_agent": [
+      "1. SET UP THE THEME: Ensure 'dark' class is applied to the html/body by default. Use the color palette defined above in tailwind.config.js.",
+      "2. TYPOGRAPHY: Import 'Outfit' and 'Inter' from Google Fonts. Apply 'Inter' to body and 'Outfit' to all headings.",
+      "3. LAYOUT: Create a Sidebar Layout. Sidebar (w-64) fixed on left, Header fixed top, Main Content scrollable area.",
+      "4. DATA GRID: Use AG Grid or TanStack Table for the hospital list, but style it heavily. Remove default borders, use zeal-zinc-800 for row dividers, hover:bg-zinc-800/50 for rows.",
+      "5. CARDS: Implement the 'Hospital Card' with the glassmorphism effect. Include 'Email', 'Phone', 'Location' icons.",
+      "6. MAP: If a map library is too complex, create a stylized CSS-only map visualization or use the region images as a 'visual selector' grid.",
+      "7. ANIMATIONS: Add 'Framer Motion' for page transitions and list entry animations. Stagger children for the hospital list.",
+      "8. AUTH: The login page must be impressive. Use the 'login_bg' image with a heavy dark overlay (bg-black/80) so text is readable. Center the login form or split 50/50.",
+      "9. REGION FILTER: Use a horizontal scrollable strip of buttons or a grid of small cards with the city images for selecting regions (Riyadh, Dammam, Dubai, etc.).",
+      "10. TESTING: Add 'data-testid' to all interactive elements (buttons, inputs, filters)."
+    ],
+    "universal_guidelines": [
+      "Don't make generic centered layouts.",
+      "Create depth through layered design elements with z-index hierarchy.",
+      "Use glass-morphism effects with backdrop filters.",
+      "Every interaction needs micro-animations - hover states, transitions.",
+      "Use 2-3x more spacing than feels comfortable.",
+      "Subtle grain textures, noise overlays.",
+      "Use 'sonner' for toasts.",
+      "Components MUST use named exports.",
+      "Pages MUST use default exports."
+    ]
+  }
+}
