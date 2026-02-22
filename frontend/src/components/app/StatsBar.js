@@ -77,6 +77,9 @@ export const StatsBar = ({ stats }) => {
           </div>
           <p className="stat-number text-2xl font-bold font-['Outfit'] text-zinc-100">{item.value}</p>
           <p className="text-[11px] text-zinc-500 mt-1 uppercase tracking-wider">{item.label}</p>
+          {item.subValue && (
+            <p className="text-[10px] text-zinc-600 mt-0.5 font-mono">{item.subValue}</p>
+          )}
         </div>
       ))}
     </div>
