@@ -379,6 +379,59 @@ async def export_hospitals_csv(region: Optional[str] = None, country: Optional[s
         headers={"Content-Disposition": "attachment; filename=gcc_hospitals.csv"}
     )
 
+# --- Hourly Auto-Refresh Scheduler ---
+auto_refresh_task = None
+scheduler_status = {"running": False, "last_run": None, "next_run": None, "interval_seconds": 3600}
+
+async def hourly_refresh_loop():
+    """Background task that refreshes all GCC regions every hour."""
+    global scheduler_status
+    scheduler_status["running"] = True
+    logger.info("Hourly auto-refresh scheduler started (every 1 hour)")
+    
+    while True:
+        try:
+            scheduler_status["last_run"] = datetime.now(timezone.utc).isoformat()
+            scheduler_status["next_run"] = (
+                datetime.now(timezone.utc).replace(microsecond=0)
+            ).isoformat()
+            
+            logger.info("Auto-refresh: Starting hourly GCC hospital data refresh...")
+            total_added = 0
+            for country, regions in GCC_REGIONS.items():
+                for region in regions:
+                    try:
+                        hospitals_data = await collect_hospital_data(region, country)
+                        count = await _save_hospitals(hospitals_data, region, country)
+                        total_added += count
+                        logger.info(f"Auto-refresh: {region} ({country}) - {count} new hospitals")
+                    except Exception as e:
+                        logger.error(f"Auto-refresh error for {region}: {e}")
+            
+            await _update_refresh_log("all", "Auto-Refresh (Hourly)")
+            logger.info(f"Auto-refresh complete. Added {total_added} new hospitals total.")
+            scheduler_status["last_run"] = datetime.now(timezone.utc).isoformat()
+            
+            # Calculate next run
+            next_run = datetime.now(timezone.utc).timestamp() + 3600
+            scheduler_status["next_run"] = datetime.fromtimestamp(next_run, tz=timezone.utc).isoformat()
+            
+        except Exception as e:
+            logger.error(f"Auto-refresh loop error: {e}")
+        
+        # Wait 1 hour
+        await asyncio.sleep(3600)
+
+@api_router.get("/scheduler/status")
+async def get_scheduler_status():
+    return {
+        "running": scheduler_status["running"],
+        "interval": "Every 1 hour",
+        "interval_seconds": scheduler_status["interval_seconds"],
+        "last_run": scheduler_status["last_run"],
+        "next_run": scheduler_status["next_run"],
+    }
+
 # --- Refresh Logs ---
 @api_router.get("/refresh-logs")
 async def get_refresh_logs():
