@@ -1,7 +1,33 @@
-import { Database, Globe2, Building2, Clock, TrendingUp } from "lucide-react";
+import { Database, Globe2, Building2, Clock, Timer } from "lucide-react";
+import { useState, useEffect } from "react";
+import { API } from "@/App";
+import axios from "axios";
 
 export const StatsBar = ({ stats }) => {
+  const [scheduler, setScheduler] = useState(null);
+
+  useEffect(() => {
+    const fetchScheduler = async () => {
+      try {
+        const res = await axios.get(`${API}/scheduler/status`);
+        setScheduler(res.data);
+      } catch (e) {}
+    };
+    fetchScheduler();
+    const interval = setInterval(fetchScheduler, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
   if (!stats) return null;
+
+  const nextRunLabel = scheduler?.next_run
+    ? (() => {
+        const next = new Date(scheduler.next_run);
+        const now = new Date();
+        const diffMin = Math.max(0, Math.round((next - now) / 60000));
+        return diffMin > 0 ? `${diffMin}m` : "Now";
+      })()
+    : "—";
 
   const statItems = [
     {
@@ -26,16 +52,12 @@ export const StatsBar = ({ stats }) => {
       bg: "bg-purple-500/10",
     },
     {
-      label: "Last Update",
-      value: stats.last_refresh
-        ? new Date(stats.last_refresh.refreshed_at).toLocaleDateString("en-US", {
-            month: "short",
-            day: "numeric",
-          })
-        : "Never",
-      icon: Clock,
-      color: "text-emerald-400",
-      bg: "bg-emerald-500/10",
+      label: "Auto-Refresh",
+      value: scheduler?.running ? "Active" : "Off",
+      subValue: scheduler?.running ? `Next: ${nextRunLabel}` : "",
+      icon: Timer,
+      color: scheduler?.running ? "text-emerald-400" : "text-zinc-500",
+      bg: scheduler?.running ? "bg-emerald-500/10" : "bg-zinc-800",
     },
   ];
 
