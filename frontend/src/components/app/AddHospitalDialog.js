@@ -66,13 +66,15 @@ export const AddHospitalDialog = ({ open, onClose, onSuccess, selectedRegion, se
     setSubmitting(true);
     try {
       await axios.post(`${API}/hospitals`, form);
-      toast.success("Hospital added successfully");
-      onSuccess();
+      // Close dialog first, then reset form
       onClose();
       setForm({
         name: "", email: "", phone: "", location: "", region: "", country: "",
         hr_contact: "", hr_email: "", website: "", specialties: "",
       });
+      setSelectedFormCountry("");
+      toast.success("Hospital added successfully");
+      onSuccess();
     } catch (err) {
       toast.error("Failed to add hospital");
     } finally {
