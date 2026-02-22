@@ -85,7 +85,7 @@ export const AddHospitalDialog = ({ open, onClose, onSuccess, selectedRegion, se
   const availableRegions = selectedFormCountry ? GCC_REGIONS[selectedFormCountry] || [] : [];
 
   return (
-    <Dialog open={open} onOpenChange={onClose}>
+    <Dialog open={open} onOpenChange={(isOpen) => { if (!isOpen) onClose(); }}>
       <DialogContent className="bg-zinc-950 border-zinc-800 text-zinc-100 max-w-lg max-h-[90vh] overflow-y-auto" data-testid="add-hospital-dialog">
         <DialogHeader>
           <DialogTitle className="text-lg font-['Outfit'] text-zinc-100">Add Hospital</DialogTitle>
