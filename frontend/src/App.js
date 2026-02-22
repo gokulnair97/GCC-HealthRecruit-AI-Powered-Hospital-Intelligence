@@ -1,53 +1,48 @@
-import { useEffect } from "react";
+import { useState, useEffect, createContext, useContext } from "react";
 import "@/App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import axios from "axios";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import LoginPage from "@/pages/LoginPage";
+import DashboardPage from "@/pages/DashboardPage";
+import { Toaster } from "@/components/ui/sonner";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+export const API = `${BACKEND_URL}/api`;
 
-const Home = () => {
-  const helloWorldApi = async () => {
-    try {
-      const response = await axios.get(`${API}/`);
-      console.log(response.data.message);
-    } catch (e) {
-      console.error(e, `errored out requesting / api`);
-    }
-  };
+export const AuthContext = createContext(null);
 
-  useEffect(() => {
-    helloWorldApi();
-  }, []);
-
-  return (
-    <div>
-      <header className="App-header">
-        <a
-          className="App-link"
-          href="https://emergent.sh"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img src="https://avatars.githubusercontent.com/in/1201222?s=120&u=2686cf91179bbafbc7a71bfbc43004cf9ae1acea&v=4" />
-        </a>
-        <p className="mt-5">Building something incredible ~!</p>
-      </header>
-    </div>
-  );
-};
+export const useAuth = () => useContext(AuthContext);
 
 function App() {
+  const [token, setToken] = useState(localStorage.getItem("gcc_token") || null);
+  const [email, setEmail] = useState(localStorage.getItem("gcc_email") || null);
+
+  const login = (tkn, em) => {
+    localStorage.setItem("gcc_token", tkn);
+    localStorage.setItem("gcc_email", em);
+    setToken(tkn);
+    setEmail(em);
+  };
+
+  const logout = () => {
+    localStorage.removeItem("gcc_token");
+    localStorage.removeItem("gcc_email");
+    setToken(null);
+    setEmail(null);
+  };
+
   return (
-    <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />}>
-            <Route index element={<Home />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </div>
+    <AuthContext.Provider value={{ token, email, login, logout }}>
+      <div className="App">
+        <BrowserRouter>
+          <Routes>
+            <Route path="/login" element={token ? <Navigate to="/" /> : <LoginPage />} />
+            <Route path="/*" element={token ? <DashboardPage /> : <Navigate to="/login" />} />
+          </Routes>
+        </BrowserRouter>
+        <Toaster position="top-right" theme="dark" richColors />
+        <div className="noise-overlay" />
+      </div>
+    </AuthContext.Provider>
   );
 }
 
