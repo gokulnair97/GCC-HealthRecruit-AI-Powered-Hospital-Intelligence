@@ -99,11 +99,15 @@ export const Sidebar = ({ selectedCountry, onSelectCountry, stats }) => {
           <div className="flex items-center gap-2 text-[10px] text-zinc-600 px-2">
             <Clock className="w-3 h-3" />
             <span>
-              Last refresh:{" "}
-              {new Date(stats.last_refresh.refreshed_at).toLocaleDateString()}
+              Updated: {new Date(stats.last_refresh.refreshed_at).toLocaleString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
             </span>
           </div>
         )}
+        
+        <div className="flex items-center gap-2 text-[10px] px-2">
+          <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="text-emerald-500/70">Auto-refresh: every 1 hour</span>
+        </div>
 
         <div className="flex items-center gap-2 px-2">
           <div className="pulse-dot" />
