@@ -454,9 +454,15 @@ logger = logging.getLogger(__name__)
 
 @app.on_event("startup")
 async def startup():
+    global auto_refresh_task
     await ensure_admin_user()
-    logger.info("GCC HealthRecruit AI Backend started")
+    # Start hourly auto-refresh background task
+    auto_refresh_task = asyncio.create_task(hourly_refresh_loop())
+    logger.info("GCC HealthRecruit AI Backend started with hourly auto-refresh")
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
+    global auto_refresh_task
+    if auto_refresh_task:
+        auto_refresh_task.cancel()
     client.close()
