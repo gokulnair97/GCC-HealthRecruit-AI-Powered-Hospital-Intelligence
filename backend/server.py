@@ -459,7 +459,4 @@ async def startup():
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
-    global auto_refresh_task
-    if auto_refresh_task:
-        auto_refresh_task.cancel()
     client.close()
